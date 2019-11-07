@@ -59,12 +59,13 @@
 </head>
 
 <body>
-
-    <div class="ui-widget">
-        <label for="tags">Buscador: </label>
-        <input id="tags" onkeypress="actualizarList()">
-    </div>
-
+    <form action="http://localhost:4000/redis/product/ricardo" method="get">
+        <div class="ui-widget">
+            <label for="tags">Buscador: </label>
+            <input id="tags" name="name" onkeypress="actualizarList()">
+        </div>
+        <input type="submit" value="buscar">
+    </form>
 
 </body>
 

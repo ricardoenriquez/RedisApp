@@ -7,6 +7,6 @@ var ProductRedis = require('../controllers/productRedis.controller');
 //router.get('/', ProductRedis.getAllProducts);
 //router.get('/:id', ProductRedis.getOne);
 
-router.post('/', ProductRedis.cache, ProductRedis.getRepos);
+router.get('/:name', ProductRedis.cache, ProductRedis.getRepos);
 router.get('/predictiva/:name', ProductRedis.getListRedis);
 module.exports = router;

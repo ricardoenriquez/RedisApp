@@ -12,8 +12,8 @@ var Client = require('node-rest-client').Client;
 var clientRest = new Client();
 
 function cache(req, res, next) {
-    const name = req.body.name;
-    console.log('********* name ' + name);
+    const name = req.params.name;
+    console.log(req.params.name + '********* name ' + name);
     client.get(name, (err, data) => {
         if (err) throw err;
 
@@ -33,7 +33,7 @@ function cache(req, res, next) {
 async function getRepos(req, res, next) {
     try {
         console.log("Fetching Data");
-        const name = req.body.name;
+        const name = req.params.name;
         clientRest.get("http://localhost:3000/api/product/" + name, function (data) {
             console.log('*** resultado ' + JSON.stringify(data));
             client.setex(name, 3600, JSON.stringify(data));
