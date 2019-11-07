@@ -14,5 +14,8 @@ app.use(json());
 
 //routes
 app.use('/redis/product',productRoutes);
+app.get('/index.html', function (req, res) {
+    res.sendFile(__dirname + "/" + "index.html");
+  })
 
 module.exports=app;
