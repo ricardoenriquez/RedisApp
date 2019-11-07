@@ -48,7 +48,7 @@ async function getRepos(req, res, next) {
 }
 
 function setResponse(name, repos) {
-    return `<h2>${name} valor  ${repos} </h2>`;
+    return repos;
 }
 
 function getListRedis(req, res) {

@@ -5,11 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>jQuery UI Autocomplete - Default functionality</title>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/resources/demos/style.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script>
         $(function () {
             var availableTags = [
@@ -25,7 +24,7 @@
                 minLength: 1,
                 lookupLimit: 10,
                 select: function (event, ui) {
-                    alert(ui.item.value); // start an alert which contains the value of proposal
+                    search(ui.item.value)
                 }
             });
         });
@@ -44,29 +43,53 @@
         async function getFilteredRequest() {
             var texto = document.getElementById("tags");
             var name = texto.value;
-            const results = await axios.get('http://localhost:4000/redis/product/predictiva/' + name).then(function (response) {
+            axios.get('http://localhost:4000/redis/product/predictiva/' + name).then(function (response) {
                 console.log(JSON.stringify(response.data));
-                return JSON.stringify(response.data);
+                $("#tags").autocomplete('option', 'source', response.data)
             }).catch(function (error) {
                 console.log(error);
             }).then(function () {
             });
+        }
 
-            $("#tags").autocomplete('option', 'source', results)
+        function searchProduct() {
+            var texto = document.getElementById("tags");
+            var name = texto.value;
+            axios.get('http://localhost:4000/redis/product/' + name).then(function (response) {
+
+                document.getElementById("resultados").innerHTML = JSON.stringify(response.data);
+            }).catch(function (error) {
+                console.log(error);
+            }).then(function () {
+            });
+        }
+
+        function search(name) {
+            axios.get('http://localhost:4000/redis/product/' + name).then(function (response) {
+
+                document.getElementById("resultados").innerHTML = JSON.stringify(response.data);
+            }).catch(function (error) {
+                console.log(error);
+            }).then(function () {
+            });
         }
 
     </script>
 </head>
 
 <body>
-    <form action="http://localhost:4000/redis/product/ricardo" method="get">
-        <div class="ui-widget">
-            <label for="tags">Buscador: </label>
-            <input id="tags" name="name" onkeypress="actualizarList()">
-        </div>
-        <input type="submit" value="buscar">
-    </form>
-
+    <div style="width: 50%">
+        <form>
+            <div class="ui-widget">
+                <label for="tags">Buscador: </label>
+                <input id="tags" name="name" onkeypress="actualizarList()">
+            </div>
+            <input type="button" onclick="searchProduct()" value="buscar">
+        </form>
+    </div>
+    <div style="width: 50%">
+        <pre id="resultados"></pre>
+    </div>
 </body>
 
 </html>
