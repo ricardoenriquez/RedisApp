@@ -9,49 +9,60 @@
     <link rel="stylesheet" href="/resources/demos/style.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
         $(function () {
-            var availableTags = 
-            /*var availableTags = [
-                "Action Script",
+            var availableTags = [
+                "Action1",
+                "Action2",
+                "ActionScript",
                 "AppleScript",
                 "Asp",
                 "BASIC",
-                "C",
-                "C++",
-                "Clojure",
-                "COBOL",
-                "ColdFusion",
-                "Erlang",
-                "Fortran",
-                "Groovy",
-                "Haskell",
-                "Java",
-                "JavaScript",
-                "Lisp",
-                "Perl",
-                "PHP",
-                "Python",
-                "Ruby",
-                "Scala",
-                "Scheme"
-            ];*/
+            ];
             $("#tags").autocomplete({
-                source: availableTags
+                source: availableTags,
+                minLength: 1,
+                lookupLimit: 10,
+                select: function (event, ui) {
+                    alert(ui.item.value); // start an alert which contains the value of proposal
+                }
             });
         });
+
+        var availableTags = [
+            "Action1",
+            "Action2",
+            "ActionScript",
+            "AppleScript",
+            "Asp",
+            "BASIC",
+        ];
+        function actualizarList() {
+            getFilteredRequest();
+        }
+        async function getFilteredRequest() {
+            var texto = document.getElementById("tags");
+            var name = texto.value;
+            const results = await axios.get('http://localhost:4000/redis/product/predictiva/' + name).then(function (response) {
+                console.log(JSON.stringify(response.data));
+                return JSON.stringify(response.data);
+            }).catch(function (error) {
+                console.log(error);
+            }).then(function () {
+            });
+
+            $("#tags").autocomplete('option', 'source', results)
+        }
+
     </script>
-    <!--form method="post" action="http://localhost:4000/redis/product/">
-        <input type="text" name="name">
-        <input type="submit">
-    </form-->
 </head>
 
 <body>
 
     <div class="ui-widget">
-        <label for="tags">Tags: </label>
-        <input id="tags">
+        <label for="tags">Buscador: </label>
+        <input id="tags" onkeypress="actualizarList()">
     </div>
 
 

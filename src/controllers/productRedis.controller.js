@@ -52,7 +52,7 @@ function setResponse(name, repos) {
 }
 
 function getListRedis(req, res) {
-    var name = req.body.name;
+    var name = req.params.name;
     client.keys(name + '*', function (err, keys) {
         if (err) return console.log(err);
 
